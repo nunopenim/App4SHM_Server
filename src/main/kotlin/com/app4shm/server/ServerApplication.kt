@@ -2,22 +2,20 @@ package com.app4shm.server
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @SpringBootApplication
-class ServerApplication {
-    fun main(args: Array<String>) {
-        runApplication<ServerApplication>(*args)
-    }
+class ServerApplication
+fun main(args: Array<String>) {
+    runApplication<ServerApplication>(*args)
 }
 
 @RestController
+@RequestMapping("/data")
 class DataGetter {
-    @RequestMapping(value = arrayOf("/data"), method = arrayOf(RequestMethod.POST))
-    fun makeData(@RequestBody data: Data) {
 
+    @PostMapping("/reading")
+    fun makeData(@RequestBody data: Array<Data>){
+        print(data[0].toString() + data[1].toString())
     }
 }
