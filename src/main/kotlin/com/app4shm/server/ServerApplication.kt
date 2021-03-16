@@ -32,7 +32,7 @@ class DataGetter {
     fun makeData(@RequestBody data: Array<Data>){
         for (i in data) {
             printme += i.toString()
-            print(i.toString());
+            print(i.toString())
             if (getHtmlLines() > LINENUMBER) {
                 printme = ""
             }
