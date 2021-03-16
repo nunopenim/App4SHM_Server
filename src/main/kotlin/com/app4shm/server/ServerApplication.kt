@@ -44,8 +44,6 @@ class DataGetter {
 class DataPusher {
     @GetMapping("/diag")
     fun pushData(@RequestParam(name = "printme", required = false, defaultValue = "") discarded : String, model : Model){
-        var printing_str : String = printme
-        printing_str = printing_str.replace("\n", "'<br>'")
         model.addAttribute("printme", printme)
     }
 }
