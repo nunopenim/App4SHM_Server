@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
+
 var printme : String = ""
 val LINENUMBER = 500
 
@@ -49,5 +50,9 @@ class DataPusher {
     @GetMapping("/diag")
     fun pushData(@RequestParam(name = "printme", required = false, defaultValue = "") discarded : String, model : Model){
         model.addAttribute("printme", printme)
+    }
+    @RequestMapping("/clear")
+    fun doStuffMethod() {
+        clear()
     }
 }
