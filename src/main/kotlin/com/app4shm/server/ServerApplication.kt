@@ -6,9 +6,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
-
-var printme : String = ""
-val LINENUMBER = 500
+var data_stream : ArrayList<Data> = ArrayList()
 
 @SpringBootApplication
 class ServerApplication
@@ -16,18 +14,8 @@ fun main(args: Array<String>) {
     runApplication<ServerApplication>(*args)
 }
 
-fun getHtmlLines() : Int {
-    var count = 0
-    for (char in printme) {
-        if (char == '\n') {
-            count++
-        }
-    }
-    return count
-}
-
 fun clear() {
-    printme = ""
+    data_stream = ArrayList()
 }
 
 @RestController
@@ -36,11 +24,7 @@ class DataGetter {
     @PostMapping("/reading")
     fun makeData(@RequestBody data: Array<Data>){
         for (i in data) {
-            printme += i.toString()
-            print(i.toString())
-            if (getHtmlLines() > LINENUMBER) {
-                printme = ""
-            }
+            data_stream.add(i)
         }
     }
 }
@@ -49,6 +33,10 @@ class DataGetter {
 class DataPusher {
     @GetMapping("/diag")
     fun pushData(@RequestParam(name = "printme", required = false, defaultValue = "") discarded : String, model : Model){
+        var printme = ""
+        for (i in data_stream) {
+            printme += i.toString()
+        }
         model.addAttribute("printme", printme)
     }
     @RequestMapping("/clear")
