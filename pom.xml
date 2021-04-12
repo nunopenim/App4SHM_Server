@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.app4shm</groupId>
     <artifactId>server</artifactId>
-    <version>0.0.1-Prealpha</version>
+    <version>0.0.2</version>
     <name>server</name>
     <description>App4SHM Server</description>
     <properties>
