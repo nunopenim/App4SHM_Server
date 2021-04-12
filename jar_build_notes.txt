@@ -1,0 +1,5 @@
+How to build
+
+Do not use IntelliJ's (or whatever IDE you use) to build this, as the final result will be missing deps.
+
+Instead, open a Terminal window in the project root, and use the command "mvn package"
