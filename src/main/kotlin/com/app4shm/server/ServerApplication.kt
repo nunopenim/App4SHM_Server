@@ -18,6 +18,10 @@ fun clear() {
     data_stream = ArrayList()
 }
 
+fun dataStreamSorter() {
+    data_stream = data_stream.sortedBy {it.timeStamp} as ArrayList<Data>
+}
+
 @RestController
 @RequestMapping("/data")
 class DataGetter {
@@ -34,6 +38,7 @@ class DataPusher {
     @GetMapping("/diag")
     fun pushData(@RequestParam(name = "printme", required = false, defaultValue = "") discarded : String, model : Model){
         var printme = ""
+        dataStreamSorter()
         for (i in data_stream) {
             printme += i.toString()
         }
