@@ -25,6 +25,10 @@ fun getHtmlLines() : Int {
     return count
 }
 
+fun clear() {
+    printme = ""
+}
+
 @RestController
 @RequestMapping("/data")
 class DataGetter {
