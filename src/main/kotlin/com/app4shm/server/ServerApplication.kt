@@ -19,7 +19,7 @@ fun clear() {
 }
 
 fun dataStreamSorter() {
-    data_stream = data_stream.sortedBy {it.timeStamp} as ArrayList<Data>
+    data_stream.sortBy {it.timeStamp}
 }
 
 @RestController
@@ -38,9 +38,11 @@ class DataPusher {
     @GetMapping("/diag")
     fun pushData(@RequestParam(name = "printme", required = false, defaultValue = "") discarded : String, model : Model){
         var printme = ""
-        dataStreamSorter()
-        for (i in data_stream) {
-            printme += i.toString()
+        if (data_stream.size != 0) {
+            dataStreamSorter()
+            for (i in data_stream) {
+                printme += i.toString()
+            }
         }
         model.addAttribute("printme", printme)
     }
