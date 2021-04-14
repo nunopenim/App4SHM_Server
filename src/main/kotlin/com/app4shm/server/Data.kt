@@ -6,6 +6,6 @@ class Data(val id: String, val timeStamp: Long, val x: Float, val y: Float, val 
     }
 
     fun JSONer(): String {
-        return "{\"id\": \"${id}\", \"timeStamp\": ${timeStamp}, \"x\": ${x}, \"y\": ${y}, \"z\": ${z}, \"group\": ${group}}"
+        return "{\"id\": \"${id}\", \"timeStamp\": ${timeStamp}, \"x\": ${x}, \"y\": ${y}, \"z\": ${z}, \"group\": \"${group}\"}"
     }
 }
