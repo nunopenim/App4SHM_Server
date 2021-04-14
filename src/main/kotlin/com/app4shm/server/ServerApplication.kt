@@ -1,5 +1,6 @@
 package com.app4shm.server
 
+import org.app4shm.demo.Data
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.stereotype.Controller
