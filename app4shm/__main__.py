@@ -30,4 +30,4 @@ def diag():
     return flask.render_template("diag.html")
 
 
-app.run()
+app.run(port="8080")  # change to port 80 on the server or use iptables, idk
