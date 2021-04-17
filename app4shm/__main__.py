@@ -31,13 +31,3 @@ def diag():
 
 
 app.run()
-
-# Old main, for debugging
-
-# def main():
-#     data = Data("test", 11111, 0.0, 0.0, 0.0, "nuno")
-#     print(data.to_string())
-
-
-# if __name__ == '__main__':
-#    main()
