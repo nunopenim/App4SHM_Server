@@ -4,12 +4,27 @@
 #
 # No tabs allowed for the safety of the entire project
 # Use 4 spaces (I KNOW, BUT THAT'S HOW PYTHON ROLLS, I AM SORRY)
+
+import flask
 from app4shm.entities.data import Data
 
-def main():
-    data = Data("test", 11111, 0.0, 0.0, 0.0, "nuno")
-    print(data.to_string())
-    
+app = flask.Flask(__name__)
+app.config["DEBUG"] = True
 
-if __name__ == '__main__':
-    main()
+
+@app.route('/', methods=['GET'])
+def diag():
+    return flask.render_template("diag.html")
+
+
+app.run()
+
+# Old main, for debugging
+
+# def main():
+#     data = Data("test", 11111, 0.0, 0.0, 0.0, "nuno")
+#     print(data.to_string())
+
+
+# if __name__ == '__main__':
+#    main()
