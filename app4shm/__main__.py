@@ -37,7 +37,10 @@ def print_stream():
 # Webservice itself
 @app.route('/', methods=['GET'])
 def diag():
-    return flask.render_template("diag.html")
+    datalist = ""
+    for i in data_stream:
+        datalist += i.to_string()
+    return flask.render_template("diag.html", datalist=datalist)
 
 @app.route('/data/reading', methods=['POST'])
 def recieve():
