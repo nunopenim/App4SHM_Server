@@ -35,7 +35,7 @@ def print_stream():
         print(i.to_string())
 
 # Webservice itself
-@app.route('diag')
+@app.route('/diag')
 def legacy():
     return flask.redirect(flask.url_for('diag'))
 
