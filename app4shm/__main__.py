@@ -45,6 +45,7 @@ def recieve():
     for i in recieved:
         data = Data(identifier=i['id'], timestamp=int(i['timeStamp']), x=float(i['x']), y=float(i['y']), z=float(i['z']), group=i['group'])
         push_to_stream(data)
+    sort_stream()
     return ""
 
 app.run(port="8080")  # change to port 80 on the server or use iptables, idk
