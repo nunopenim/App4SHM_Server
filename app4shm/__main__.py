@@ -3,7 +3,7 @@
 # Nuno Penim, Paulo Oliveira, 2021
 #
 # No tabs allowed for the safety of the entire project
-# Use 4 spaces (I KNOW, BUT THAT'S HOW PYTHON ROLLS, I AM SORRY)
+# Use 4 spaces as indentation (I KNOW, BUT THAT'S HOW PYTHON ROLLS, I AM SORRY)
 
 import flask
 import operator
@@ -14,7 +14,7 @@ from app4shm.entities.data import Data
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
-# Data we get from the internet and management functions of such data
+# datastream and operations on it
 data_stream = []
 
 def clear_stream():
@@ -57,17 +57,3 @@ def recieve():
     return ""
 
 app.run(port="8080")  # change to port 80 on the server or use iptables, idk
-
-# def main():
-#     global data_stream
-#     data_stream.append(Data("teste", 1, 0.0, 0.0, 0.0, "nuno"))
-#     data_stream.append(Data("teste", 2, 0.0, 0.0, 0.0, "nuno"))
-#     data_stream.append(Data("teste", 0, 0.0, 0.0, 0.0, "nuno"))
-#     for i in data_stream:
-#         print(i.timestamp)
-#     sort_stream()
-#     for i in data_stream:
-#         print(i.timestamp)
-
-# if __name__ == '__main__':
-#     main()
