@@ -42,6 +42,11 @@ def diag():
         datalist += i.to_string()
     return flask.render_template("diag.html", datalist=datalist)
 
+@app.route('/cleanup')
+def cleanup():
+    clear_stream()
+    return flask.redirect(flask.url_for('diag'))
+
 @app.route('/data/reading', methods=['POST'])
 def recieve():
     recieved = flask.request.get_json()
