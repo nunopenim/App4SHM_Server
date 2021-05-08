@@ -37,6 +37,11 @@ def print_stream():
 # Webservice itself
 @app.route('/diag')
 def legacy():
+    """
+    This is just a legacy method, just to redirect people to the new page, in the root, just in case
+    someone is evaluating our report and the server looks "dead". Expect it to be removed in future
+    iterations of the project
+    """
     return flask.redirect(flask.url_for('diag'))
 
 @app.route('/', methods=['GET'])
