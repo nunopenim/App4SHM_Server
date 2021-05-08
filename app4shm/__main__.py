@@ -12,7 +12,7 @@ from app4shm.entities.data import Data
 
 # Webstuff properties
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
+app.config["DEBUG"] = False
 
 # datastream and operations on it
 data_stream = []
@@ -56,4 +56,4 @@ def recieve():
     sort_stream()
     return ""
 
-app.run(port="8080")  # change to port 80 on the server or use iptables, idk
+app.run(host="0.0.0.0", port="8080")  # change to port 80 on the server or use iptables, idk
