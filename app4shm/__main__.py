@@ -7,6 +7,7 @@
 
 import flask
 import operator
+
 from app4shm.entities.data import Data
 
 # Webstuff properties
@@ -24,12 +25,27 @@ def sort_stream():
     global data_stream
     data_stream.sort(key=operator.attrgetter("timestamp"))
 
+def push_to_stream(data: Data):
+    global data_stream
+    data_stream.append(data)
+
+def print_stream():
+    global data_stream
+    for i in data_stream:
+        print(i.to_string())
 
 # Webservice itself
 @app.route('/', methods=['GET'])
 def diag():
     return flask.render_template("diag.html")
 
+@app.route('/data/reading', methods=['POST'])
+def recieve():
+    recieved = flask.request.get_json()
+    for i in recieved:
+        data = Data(identifier=i['id'], timestamp=int(i['timeStamp']), x=float(i['x']), y=float(i['y']), z=float(i['z']), group=i['group'])
+        push_to_stream(data)
+    return ""
 
 app.run(port="8080")  # change to port 80 on the server or use iptables, idk
 
