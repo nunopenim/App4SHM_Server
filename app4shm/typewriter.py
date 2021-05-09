@@ -21,6 +21,13 @@ def __clear_buffer():
     return
 
 
+def __is_buffer_empty():
+    global buffer
+    if buffer is None or buffer == "":
+        return True
+    return False
+
+
 def __write_header_to_buffer(station: str, sampling: float, start_date: str, start_time: str):
     global buffer
     buffer += "Station_code    " + station + "\n\n"
