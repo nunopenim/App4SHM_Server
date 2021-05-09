@@ -13,10 +13,19 @@ import datetime as dt
 
 # Internal use functions
 # In case you don't know, __ makes it "private"
+
 def __millis_to_str_stamp(millis):
-    intermediate_fractionate_time = millis / 1000.0 # we need a fractionate time, more on that later
+    intermediate_fractionate_time = millis / 1000.0  # we need a fractionate time, more on that later
     time_stamp = dt.datetime.fromtimestamp(intermediate_fractionate_time).strftime('%Y-%m-%d %H:%M:%S.%f')
-    return time_stamp
+    # https://stackoverflow.com/questions/11040177/datetime-round-trim-number-of-digits-in-microseconds
+    # most times, the last 3 digits are 0s, and I don't know if that messes with the Professors' MATLAB algos
+    # So we keep that like normal for now!
+    head = time_stamp[:-7]
+    tail = time_stamp[-7:]
+    f = float(tail)
+    temp = "{:.03f}".format(f)
+    new_tail = temp[1:]
+    return head + new_tail
 
 
 # External use functions
