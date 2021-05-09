@@ -31,7 +31,7 @@ def __is_buffer_empty() -> bool:
 def __write_header_to_buffer(station: str, sampling: float, start_date: str, start_time: str):
     global buffer
     buffer += "Station_code    " + station + "\n\n"
-    buffer += "Sampling_rate   " + sampling + "\n\n"
+    buffer += "Sampling_rate   " + str(sampling) + "\n\n"
     buffer += "Start_date      " + start_date + "\n\n"
     buffer += "Start_time      " + start_time + "\n\n"
     buffer += "Time   X,g    Y,g    Z,g \n\n"
