@@ -21,7 +21,7 @@ def __clear_buffer():
     return
 
 
-def __is_buffer_empty():
+def __is_buffer_empty() -> bool:
     global buffer
     if buffer is None or buffer == "":
         return True
@@ -45,7 +45,7 @@ def __write_reading_to_buffer(time: str, x: str, y: str, z: str):
 
 
 # External use functions
-def data_stream_to_buffer(data_stream: list[Data]):
+def data_stream_to_buffer(data_stream: list[Data]) -> bool:
     # Assumingly, it is sorted!
     if len(data_stream) == 0:
         return False
