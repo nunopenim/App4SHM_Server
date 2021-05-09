@@ -1,4 +1,6 @@
-# App4SHM Initial Server Python Port
+# App4SHM Server - Main script
+#
+# In here, all the datastream related and webservice related functions are present
 #
 # Nuno Penim, Paulo Oliveira, 2021
 #
