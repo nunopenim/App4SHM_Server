@@ -75,7 +75,7 @@ def buffer_to_file(filename: str) -> bool:
     if os.path.exists(WRITEDIR + filename):
         os.remove(WRITEDIR + filename)
     try:
-        file = open(WRITEDIR + filename + ".txt", "w")
+        file = open(WRITEDIR + filename + '.txt', "w")
         file.write(buffer)
         file.close()
         return True
