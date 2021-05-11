@@ -18,6 +18,7 @@ ZIP_FILE = "deliverable.zip"
 # Web Service properties
 app = flask.Flask(__name__)
 app.config["DEBUG"] = False
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 # data stream and operations on it
 data_stream = []
