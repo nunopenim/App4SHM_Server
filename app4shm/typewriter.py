@@ -66,6 +66,9 @@ def data_stream_to_buffer(data_stream: list[Data]) -> bool:
     except:
         return False
 
+def clear_write_output():
+    os.remove(WRITEDIR + "*")
+
 def buffer_to_file(filename: str) -> bool:
     if not os.path.exists(WRITEDIR):
         os.mkdir(WRITEDIR)
@@ -80,5 +83,7 @@ def buffer_to_file(filename: str) -> bool:
         return False
 
 def zip_file():
+    if os.path.exists("deliverable.zip"):
+        os.remove("deliverable.zip")
     shutil.make_archive("deliverable", "zip", WRITEDIR)
     return

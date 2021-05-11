@@ -88,17 +88,16 @@ def receive():
 def write_files():
     global data_stream
     dict = {}
+    tw.clear_write_output()
     for i in data_stream:
         key = i.identifier
         if dict.get(key) == None:
             dict[key] = []
         dict[key].append(i)
-    print(dict)
     for i in dict.keys():
         tw.data_stream_to_buffer(dict[i])
         tw.buffer_to_file(i)
     tw.zip_file()
-    return ""
-    #return flask.send_from_directory("..", ZIP_FILE, as_attachment=True, cache_timeout=0)
+    return flask.send_from_directory("..", ZIP_FILE, as_attachment=True, cache_timeout=0)
 
 app.run(host="0.0.0.0", port="8080")  # change to port 80 on the server or use iptables, idk
