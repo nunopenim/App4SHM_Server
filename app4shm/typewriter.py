@@ -67,7 +67,7 @@ def data_stream_to_buffer(data_stream: list[Data]) -> bool:
         return False
 
 def write_dir_clean():
-    os.remove(WRITEDIR + "*")
+    os.remove(WRITEDIR)
     return
 
 def buffer_to_file(filename: str) -> bool:
