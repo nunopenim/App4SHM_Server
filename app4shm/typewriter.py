@@ -66,6 +66,8 @@ def data_stream_to_buffer(data_stream: list[Data]) -> bool:
         return False
 
 def buffer_to_file(filename: str) -> bool:
+    if not os.path.exists(WRITEDIR):
+        os.mkdir(WRITEDIR)
     if os.path.exists(WRITEDIR + filename):
         os.remove(WRITEDIR + filename)
     try:
