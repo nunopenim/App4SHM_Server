@@ -6,7 +6,20 @@
 </head>
 <body>
     <h1>App4SHM Diagnostic Page</h1>
-    <p ><a href=cleanup ><button class=grey style="height: 75px; width: 150px; font-size: 20px">Clear page</button></a></p>
+    <div style="float: left; display: inline-flex">
+        <a href=cleanup style="padding-left: 25px">
+            <button class=grey style="height: 75px; width: 150px; font-size: 20px">Clear page</button>
+        </a>
+        <a href=generate style="padding-left: 25px">
+            <button class=grey style="height: 75px; width: 150px; font-size: 20px">Generate Data</button>
+        </a>
+        <a href=dload style="padding-left: 25px">
+            <button class=grey style="height: 75px; width: 150px; font-size: 20px">Download Data</button>
+        </a>
+    </div>
+    <br>
+    <br>
+    <br>
     <span style="white-space: pre-wrap">
         <p>{{datalist}}</p>
     </span>
