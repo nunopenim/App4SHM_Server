@@ -10,7 +10,9 @@
 
 import app4shm.sys_helpers.time_aux_funcs as tf
 from app4shm.entities.data import Data
+import os
 
+WRITEDIR = "temp/"
 buffer = ""
 
 
@@ -59,6 +61,17 @@ def data_stream_to_buffer(data_stream: list[Data]) -> bool:
         __write_header_to_buffer(station, sampling, start_date, start_time)
         for i in data_stream:
             __write_reading_to_buffer(tf.get_time_of_measuring_from_millis(i.timestamp), str(i.x), str(i.y), str(i.z))
-            return True
+        return True
+    except:
+        return False
+
+def buffer_to_file(filename: str) -> bool:
+    if os.path.exists(WRITEDIR + filename):
+        os.remove(WRITEDIR + filename)
+    try:
+        file = open(WRITEDIR + filename, "w")
+        file.write(buffer)
+        file.close()
+        return True
     except:
         return False
