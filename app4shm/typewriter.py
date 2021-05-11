@@ -11,6 +11,7 @@
 import app4shm.sys_helpers.time_aux_funcs as tf
 from app4shm.entities.data import Data
 import os
+import shutil
 
 WRITEDIR = "temp/"
 buffer = ""
@@ -65,6 +66,10 @@ def data_stream_to_buffer(data_stream: list[Data]) -> bool:
     except:
         return False
 
+def write_dir_clean():
+    os.remove(WRITEDIR + "*")
+    return
+
 def buffer_to_file(filename: str) -> bool:
     if not os.path.exists(WRITEDIR):
         os.mkdir(WRITEDIR)
@@ -77,3 +82,7 @@ def buffer_to_file(filename: str) -> bool:
         return True
     except:
         return False
+
+def zip_file():
+    shutil.make_archive("deliverable", "zip", WRITEDIR)
+    return
