@@ -13,7 +13,7 @@ import app4shm.typewriter as tw
 from app4shm.entities.data import Data
 import os
 
-ZIP_FILE = "../deliverable.zip"
+ZIP_FILE = "deliverable.zip"
 
 # Web Service properties
 app = flask.Flask(__name__)
@@ -86,7 +86,6 @@ def receive():
 @app.route('/generate')
 def write_files():
     global data_stream
-    os.remove(ZIP_FILE)
     dict = {}
     for i in data_stream:
         key = i.identifier
@@ -97,7 +96,6 @@ def write_files():
         tw.data_stream_to_buffer(dict[i])
         tw.buffer_to_file(i)
     tw.zip_file()
-    tw.write_dir_clean()
-    return flask.send_file(ZIP_FILE, as_attachment=True, cache_timeout=0)
+    return flask.send_from_directory("..", ZIP_FILE, as_attachment=True, cache_timeout=0)
 
 app.run(host="0.0.0.0", port="8080")  # change to port 80 on the server or use iptables, idk
