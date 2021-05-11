@@ -9,7 +9,7 @@
 
 import flask
 import operator
-
+import app4shm.typewriter as tw
 from app4shm.entities.data import Data
 
 # Web Service properties
@@ -80,5 +80,18 @@ def receive():
     sort_stream()
     return ""
 
+@app.route('/generate')
+def write_files():
+    global data_stream
+    dict = {}
+    for i in data_stream:
+        key = i.identifier
+        if dict.get(key) == None:
+            dict[key] = []
+        dict[key].append(i)
+    for i in dict.keys():
+        tw.data_stream_to_buffer(dict[i])
+        tw.buffer_to_file(i)
+    return ""
 
 app.run(host="0.0.0.0", port="8080")  # change to port 80 on the server or use iptables, idk
