@@ -86,7 +86,7 @@ def receive():
 @app.route('/generate')
 def write_files():
     global data_stream
-    #os.remove(ZIP_FILE)
+    os.remove(ZIP_FILE)
     dict = {}
     for i in data_stream:
         key = i.identifier
@@ -97,7 +97,7 @@ def write_files():
         tw.data_stream_to_buffer(dict[i])
         tw.buffer_to_file(i)
     tw.zip_file()
-    #tw.write_dir_clean()
-    return flask.send_file(ZIP_FILE, "deliverable.zip")
+    tw.write_dir_clean()
+    return flask.send_file(ZIP_FILE, "deliverable.zip", cache_timeout=0)
 
 app.run(host="0.0.0.0", port="8080")  # change to port 80 on the server or use iptables, idk
