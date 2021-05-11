@@ -67,7 +67,7 @@ def data_stream_to_buffer(data_stream: list[Data]) -> bool:
         return False
 
 def clear_write_output():
-    os.remove(WRITEDIR)
+    shutil.rmtree(WRITEDIR)
 
 def buffer_to_file(filename: str) -> bool:
     if not os.path.exists(WRITEDIR):
