@@ -86,7 +86,7 @@ def receive():
 @app.route('/generate')
 def write_files():
     global data_stream
-    os.remove(ZIP_FILE)
+    #os.remove(ZIP_FILE)
     dict = {}
     for i in data_stream:
         key = i.identifier
