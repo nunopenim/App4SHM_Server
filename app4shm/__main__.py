@@ -92,6 +92,7 @@ def write_files():
     for i in dict.keys():
         tw.data_stream_to_buffer(dict[i])
         tw.buffer_to_file(i)
+    tw.zip_file()
     return ""
 
 app.run(host="0.0.0.0", port="8080")  # change to port 80 on the server or use iptables, idk
