@@ -93,6 +93,6 @@ def write_files():
         tw.data_stream_to_buffer(dict[i])
         tw.buffer_to_file(i)
     tw.zip_file()
-    return ""
+    return flask.send_file("deliverable.zip", "deliverable.zip")
 
 app.run(host="0.0.0.0", port="8080")  # change to port 80 on the server or use iptables, idk
