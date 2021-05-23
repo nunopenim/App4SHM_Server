@@ -33,11 +33,11 @@ def __is_buffer_empty() -> bool:
 
 def __write_header_to_buffer(station: str, sampling: float, start_date: str, start_time: str):
     global buffer
-    buffer += "Station_code    " + station + "\n\n"
-    buffer += "Sampling_rate   " + str(sampling) + "\n\n"
-    buffer += "Start_date      " + start_date + "\n\n"
-    buffer += "Start_time      " + start_time + "\n\n"
-    buffer += "Time   X,g    Y,g    Z,g \n\n"
+    buffer += "Station_code    " + station + "\n"
+    buffer += "Sampling_rate   " + str(sampling) + "\n"
+    buffer += "Start_date      " + start_date + "\n"
+    buffer += "Start_time      " + start_time + "\n"
+    buffer += "Time(s)   X,g(m*s^-2)    Y,g(m*s^-2)    Z,g(m*s^-2) \n\n"
     return
 
 
@@ -55,13 +55,15 @@ def data_stream_to_buffer(data_stream: list[Data]) -> bool:
     try:
         __clear_buffer()
         sample_obj = data_stream[0]
+        start_tstamp = sample_obj.timestamp
         station = sample_obj.identifier + "/" + sample_obj.group
         sampling = 50.0  # Hardcoded 50Hz, for now as we would need to change object format in both py and kt
         start_date = tf.get_str_date_from_millis(sample_obj.timestamp)
         start_time = tf.get_time_of_measuring_from_millis(sample_obj.timestamp)
         __write_header_to_buffer(station, sampling, start_date, start_time)
         for i in data_stream:
-            __write_reading_to_buffer(tf.get_time_of_measuring_from_millis(i.timestamp), str(i.x), str(i.y), str(i.z))
+            tstamp = i.timestamp - start_tstamp
+            __write_reading_to_buffer(tf.millis_to_sec(tstamp), str(i.x), str(i.y), str(i.z))
         return True
     except:
         return False
