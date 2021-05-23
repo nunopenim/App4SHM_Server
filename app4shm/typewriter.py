@@ -43,7 +43,7 @@ def __write_header_to_buffer(station: str, sampling: float, start_date: str, sta
 
 def __write_reading_to_buffer(time: str, x: str, y: str, z: str):
     global buffer
-    buffer += time + " " + x + " " + y + " " + z + "\n\n"
+    buffer += time + " " + x + " " + y + " " + z + "\n"
     return
 
 
