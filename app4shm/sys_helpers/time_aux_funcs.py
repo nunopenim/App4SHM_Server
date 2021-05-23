@@ -39,3 +39,9 @@ def get_time_of_measuring_from_millis(millis):
     time_stamp = __millis_to_str_stamp(millis)
     time_str = time_stamp.split(" ")[1]
     return time_str
+
+
+def millis_to_sec(millis):
+    secs = float(millis / 1000)
+    sec_str = str(secs)
+    return str(sec_str)
