@@ -34,4 +34,5 @@ build/
 
 ### App4SHM ###
 /app4shm/temp/*
+/app4shm/inter_temp/*
 /app4shm/deliverable.zip

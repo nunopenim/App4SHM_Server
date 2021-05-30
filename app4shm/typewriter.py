@@ -84,8 +84,8 @@ def buffer_to_file(filename: str) -> bool:
     except:
         return False
 
-def zip_file():
-    if os.path.exists("deliverable.zip"):
-        os.remove("deliverable.zip")
-    shutil.make_archive("deliverable", "zip", WRITEDIR)
+def zip_file(name_str, writedir=WRITEDIR):
+    if os.path.exists(name_str + ".zip"):
+        os.remove(name_str + ".zip")
+    shutil.make_archive(name_str, "zip", writedir)
     return

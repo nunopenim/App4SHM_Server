@@ -11,6 +11,7 @@ import flask
 import operator
 import app4shm.typewriter as tw
 from app4shm.entities.data import Data
+import app4shm.mathematics as mt
 
 ZIP_FILE = "deliverable.zip"
 
@@ -96,7 +97,23 @@ def write_files():
     for i in dict.keys():
         tw.data_stream_to_buffer(dict[i])
         tw.buffer_to_file(i)
-    tw.zip_file()
+    tw.zip_file("deliverable")
     return flask.send_from_directory("..", ZIP_FILE, as_attachment=True, cache_timeout=0)
+
+@app.route('/interpolate')
+def crude_interpolate():
+    interpolated = mt.interpolate_data_stream(data_stream)
+    dict = {}
+    tw.clear_write_output()
+    for i in interpolated:
+        key = i.identifier
+        if dict.get(key) == None:
+            dict[key] = []
+        dict[key].append(i)
+    for i in dict.keys():
+        tw.data_stream_to_buffer(dict[i])
+        tw.buffer_to_file(i + "_int")
+    tw.zip_file("interpolated", "inter_temp/")
+    return
 
 app.run(host="0.0.0.0", port="8080")  # change to port 80 on the server or use iptables, idk
