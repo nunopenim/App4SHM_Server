@@ -16,7 +16,7 @@ INTERPOLATION_TYPE = 'linear'
 TIME_INCREMENT = 10  # 10 ms
 
 
-def interpolate_data_stream(data_stream : list[Data]):
+def interpolate_data_stream(data_stream: list[Data]):
     data_device = data_stream[0].identifier
     data_group = data_stream[0].group
     data_times = []
@@ -40,5 +40,10 @@ def interpolate_data_stream(data_stream : list[Data]):
     inter_z = interpn(data_times, data_x, t_interval, INTERPOLATION_TYPE)
     ret_stream = []
     for i in range(0, len(t_interval)):
-        ret_stream.append(Data(identifier=data_device, timestamp=t_interval[i], x=inter_x[i], y=inter_y[i], z=inter_z[i], group=data_group))
+        ret_stream.append(Data(identifier=data_device,
+                               timestamp=t_interval[i],
+                               x=inter_x[i],
+                               y=inter_y[i],
+                               z=inter_z[i],
+                               group=data_group))
     return ret_stream
