@@ -71,13 +71,13 @@ def data_stream_to_buffer(data_stream: list[Data]) -> bool:
 def clear_write_output():
     shutil.rmtree(WRITEDIR)
 
-def buffer_to_file(filename: str) -> bool:
-    if not os.path.exists(WRITEDIR):
-        os.mkdir(WRITEDIR)
-    if os.path.exists(WRITEDIR + filename):
-        os.remove(WRITEDIR + filename)
+def buffer_to_file(filename: str, writedir=WRITEDIR) -> bool:
+    if not os.path.exists(writedir):
+        os.mkdir(writedir)
+    if os.path.exists(writedir + filename + ".txt"):
+        os.remove(writedir + filename + ".txt")
     try:
-        file = open(WRITEDIR + filename + '.txt', "w")
+        file = open(writedir + filename + '.txt', "w")
         file.write(buffer)
         file.close()
         return True

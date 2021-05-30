@@ -113,7 +113,7 @@ def crude_interpolate():
     print(dict)
     for i in dict.keys():
         tw.data_stream_to_buffer(dict[i])
-        tw.buffer_to_file(i + "_int")
+        tw.buffer_to_file(i + "_int", "inter_temp/")
     tw.zip_file("interpolated", "inter_temp/")
     return flask.send_from_directory("..", "interpolated.zip", as_attachment=True, cache_timeout=0)
 
