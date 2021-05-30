@@ -114,6 +114,6 @@ def crude_interpolate():
         tw.data_stream_to_buffer(dict[i])
         tw.buffer_to_file(i + "_int")
     tw.zip_file("interpolated", "inter_temp/")
-    return
+    return flask.send_from_directory("..", "interpolated.zip", as_attachment=True, cache_timeout=0)
 
 app.run(host="0.0.0.0", port="8080")  # change to port 80 on the server or use iptables, idk
