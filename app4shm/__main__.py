@@ -110,6 +110,7 @@ def crude_interpolate():
         if dict.get(key) == None:
             dict[key] = []
         dict[key].append(i)
+    print(dict)
     for i in dict.keys():
         tw.data_stream_to_buffer(dict[i])
         tw.buffer_to_file(i + "_int")
