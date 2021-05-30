@@ -104,7 +104,7 @@ def write_files():
 def crude_interpolate():
     interpolated = mt.interpolate_data_stream(data_stream)
     dict = {}
-    tw.clear_write_output()
+    tw.clear_write_output("inter_temp/")
     for i in interpolated:
         key = i.identifier
         if dict.get(key) == None:
