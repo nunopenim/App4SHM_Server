@@ -11,7 +11,6 @@ import flask
 import operator
 import app4shm.typewriter as tw
 from app4shm.entities.data import Data
-import os
 
 ZIP_FILE = "deliverable.zip"
 
