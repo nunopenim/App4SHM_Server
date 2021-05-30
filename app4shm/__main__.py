@@ -84,36 +84,39 @@ def receive():
     sort_stream()
     return ""
 
+
 @app.route('/generate')
 def write_files():
     global data_stream
-    dict = {}
+    dicte = {}
     tw.clear_write_output()
     for i in data_stream:
         key = i.identifier
-        if dict.get(key) == None:
-            dict[key] = []
-        dict[key].append(i)
-    for i in dict.keys():
-        tw.data_stream_to_buffer(dict[i])
+        if dicte.get(key) is None:
+            dicte[key] = []
+        dicte[key].append(i)
+    for i in dicte.keys():
+        tw.data_stream_to_buffer(dicte[i])
         tw.buffer_to_file(i)
     tw.zip_file("deliverable")
     return flask.send_from_directory("..", ZIP_FILE, as_attachment=True, cache_timeout=0)
 
+
 @app.route('/interpolate')
 def crude_interpolate():
     interpolated = mt.interpolate_data_stream(data_stream)
-    dict = {}
+    dicte = {}
     tw.clear_write_output("inter_temp/")
     for i in interpolated:
         key = i.identifier
-        if dict.get(key) == None:
-            dict[key] = []
-        dict[key].append(i)
-    for i in dict.keys():
-        tw.data_stream_to_buffer(dict[i])
+        if dicte.get(key) is None:
+            dicte[key] = []
+        dicte[key].append(i)
+    for i in dicte.keys():
+        tw.data_stream_to_buffer(dicte[i])
         tw.buffer_to_file(i + "_int", "inter_temp/")
     tw.zip_file("interpolated", "inter_temp/")
     return flask.send_from_directory("..", "interpolated.zip", as_attachment=True, cache_timeout=0)
+
 
 app.run(host="0.0.0.0", port="8080")  # change to port 80 on the server or use iptables, idk
