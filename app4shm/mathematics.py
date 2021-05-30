@@ -16,10 +16,10 @@ import numpy as np
 INTERPOLATION_TYPE = 'linear'
 TIME_INCREMENT = 10  # 10 ms
 
+
 def interpolate_data_stream(data_stream: list[Data]):
     data_device = data_stream[0].identifier
     data_group = data_stream[0].group
-    start_time = data_stream[0].timestamp
     data_times = []
     data_x = []
     data_y = []
