@@ -71,6 +71,7 @@ def data_stream_to_buffer(data_stream: list[Data]) -> bool:
 
 def clear_write_output(writedir=WRITEDIR):
     shutil.rmtree(writedir)
+    os.mkdir(writedir)
 
 
 def buffer_to_file(filename: str, writedir=WRITEDIR) -> bool:
