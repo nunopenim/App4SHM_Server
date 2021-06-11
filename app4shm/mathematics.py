@@ -11,6 +11,8 @@
 from scipy.interpolate import interpn as interpn
 from app4shm.entities.data import Data
 import numpy as np
+from scipy import signal
+import math
 
 # Constants and Parameters
 INTERPOLATION_TYPE = 'linear'
@@ -52,3 +54,29 @@ def interpolate_data_stream(data_stream: list[Data]):
                                z=inter_z[i],
                                group=data_group))
     return ret_stream
+
+
+def calculate_welch_from_array(time: list[float], accelerometer_input: list[float]):
+    t1 = np.reshape(time, (1, len(time)))
+    x1 = np.transpose(accelerometer_input)
+    t1 = np.transpose(t1)
+    delta_times = 0.01 # 10ms
+    measuring_frequency = delta_times**(-1)
+    total_sample_number = measuring_frequency*len(time)
+    n_segments = 3
+    ls = int(np.round(total_sample_number/n_segments))
+    overlap_perc = 50
+    overlaped_samples = int(np.round(ls*overlap_perc/100))
+    discrete_fourier_transform_points = ls
+    f, pxx = signal.welch(accelerometer_input, fs=measuring_frequency, nperseg=ls, noverlap=overlaped_samples, nfft=discrete_fourier_transform_points)
+    return f, pxx
+    # f1 = np.reshape(f, (1, len(f)))
+    # fs = 10e3
+    # N = 1e5
+    # amp = 2*np.sqrt(2)
+    # freq = 1234
+    # noise_power = 0.001 * fs / 2
+    # time = np.arange(N) / fs
+    # x = amp*np.sin(2*np.pi*freq*time)
+    # x += np.random.normal(scale=np.sqrt(noise_power), size=time.shape)
+    # f, Pxx_den = signal.welch(x, fs, nperseg=1024)
