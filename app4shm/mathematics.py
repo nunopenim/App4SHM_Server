@@ -12,7 +12,6 @@ from scipy.interpolate import interpn as interpn
 from app4shm.entities.data import Data
 import numpy as np
 from scipy import signal
-import math
 
 # Constants and Parameters
 INTERPOLATION_TYPE = 'linear'
