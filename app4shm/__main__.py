@@ -11,7 +11,7 @@ import flask
 import operator
 import app4shm.typewriter as tw
 from app4shm.entities.data import Data
-import app4shm.mathematics as mt
+import app4shm.sys_helpers.mathematics as mt
 
 ZIP_FILE = "deliverable.zip"
 
@@ -72,6 +72,7 @@ def cleanup():
 
 @app.route('/data/reading', methods=['POST'])
 def receive():
+    local_stream = []
     received = flask.request.get_json()
     for i in received:
         data = Data(identifier=i['id'],
@@ -81,7 +82,25 @@ def receive():
                     z=float(i['z']),
                     group=i['group'])
         push_to_stream(data)
+        local_stream.append(data)
     sort_stream()
+    local_stream.sort(key=operator.attrgetter("timestamp"))
+    interpolated = mt.interpolate_data_stream(local_stream)
+    time_array = []
+    x_array = []
+    y_array = []
+    z_array = []
+    for i in interpolated:
+        time_array.append(i.timestamp)
+        x_array.append(i.x)
+        y_array.append(i.y)
+        z_array.append(i.z)
+    welch_x_f, welch_x_pxx = mt.calculate_welch_from_array(time_array, x_array)
+    welch_y_f, welch_y_pxx = mt.calculate_welch_from_array(time_array, y_array)
+    welch_z_f, welch_z_pxx = mt.calculate_welch_from_array(time_array, z_array)
+    print(welch_x_f)
+    print("\n")
+    print(welch_x_pxx)
     return ""
 
 
