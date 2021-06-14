@@ -56,12 +56,9 @@ def interpolate_data_stream(data_stream: list[Data]):
 
 
 def calculate_welch_from_array(time: list[float], accelerometer_input: list[float]):
-    t1 = np.reshape(time, (1, len(time)))
-    x1 = np.transpose(accelerometer_input)
-    t1 = np.transpose(t1)
-    delta_times = 0.01 # 10ms
+    delta_times = 0.01  # 10ms
     measuring_frequency = delta_times**(-1)
-    total_sample_number = measuring_frequency*len(time)
+    total_sample_number = len(time)  # measuring_frequency*len(time)
     n_segments = 3
     ls = int(np.round(total_sample_number/n_segments))
     overlap_perc = 50
