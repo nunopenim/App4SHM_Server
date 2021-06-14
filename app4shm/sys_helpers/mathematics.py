@@ -47,21 +47,31 @@ def interpolate_data_stream(data_stream: list[Data]):
         t_interval_array.append(start_me)
         start_me += TIME_INCREMENT
     t_interval = np.array(t_interval_array)
-    x_nd = interpn((np.array(data_times),), np.array(data_x), t_interval, INTERPOLATION_TYPE)
-    y_nd = interpn((np.array(data_times),), np.array(data_y), t_interval, INTERPOLATION_TYPE)
-    z_nd = interpn((np.array(data_times),), np.array(data_z), t_interval, INTERPOLATION_TYPE)
-    inter_x = x_nd.tolist()
-    inter_y = y_nd.tolist()
-    inter_z = z_nd.tolist()
-    ret_stream = []
-    for i in range(0, len(t_interval)):
-        ret_stream.append(Data(identifier=data_device,
-                               timestamp=t_interval[i],
-                               x=inter_x[i],
-                               y=inter_y[i],
-                               z=inter_z[i],
-                               group=data_group))
-    return ret_stream
+    try:
+        x_nd = interpn((np.array(data_times),), np.array(data_x), t_interval, INTERPOLATION_TYPE)
+        y_nd = interpn((np.array(data_times),), np.array(data_y), t_interval, INTERPOLATION_TYPE)
+        z_nd = interpn((np.array(data_times),), np.array(data_z), t_interval, INTERPOLATION_TYPE)
+        inter_x = x_nd.tolist()
+        inter_y = y_nd.tolist()
+        inter_z = z_nd.tolist()
+        ret_stream = []
+        for i in range(0, len(t_interval)):
+            ret_stream.append(Data(identifier=data_device,
+                                   timestamp=t_interval[i],
+                                   x=inter_x[i],
+                                   y=inter_y[i],
+                                   z=inter_z[i],
+                                   group=data_group))
+        return ret_stream
+    except ValueError:
+        print(data_times)
+        print("\n")
+        print(data_x)
+        print("\n")
+        print(data_y)
+        print("\n")
+        print(data_z)
+
 
 
 def calculate_welch_from_array(time: list[float], accelerometer_input: list[float]):
