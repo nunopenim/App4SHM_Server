@@ -85,7 +85,7 @@ def receive():
         local_stream.append(data)
     sort_stream()
     local_stream.sort(key=operator.attrgetter("timestamp"))
-    interpolated = mt.interpolate_data_stream(local_stream)
+    interpolated = mt.interpolate_data_stream(data_stream)
     time_array = []
     x_array = []
     y_array = []
