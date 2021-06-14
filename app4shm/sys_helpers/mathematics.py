@@ -39,6 +39,7 @@ def interpolate_data_stream(data_stream: list[Data]):
         t_interval_array.append(start_me)
         start_me += TIME_INCREMENT
     t_interval = np.array(t_interval_array)
+    print(data_times)
     x_nd = interpn((np.array(data_times),), np.array(data_x), t_interval, INTERPOLATION_TYPE)
     y_nd = interpn((np.array(data_times),), np.array(data_y), t_interval, INTERPOLATION_TYPE)
     z_nd = interpn((np.array(data_times),), np.array(data_z), t_interval, INTERPOLATION_TYPE)
