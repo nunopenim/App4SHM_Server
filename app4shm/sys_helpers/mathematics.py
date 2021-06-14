@@ -31,9 +31,12 @@ def interpolate_data_stream(data_stream: list[Data]):
         data_x.append(i.x)
         data_y.append(i.y)
         data_z.append(i.z)
-    for i in range(len(data_times)-1):
-        print(len(data_times))
-        print(i)
+    range_max = len(data_times)-1
+    print(len(data_times))
+    print(len(data_x))
+    print(len(data_y))
+    print(len(data_z))
+    for i in range(range_max):
         count = data_times.count(data_times[i])
         if count > 1:
             data_times.remove(data_times[i])
