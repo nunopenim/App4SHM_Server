@@ -65,13 +65,6 @@ def interpolate_data_stream(data_stream: list[Data]):
         return ret_stream
     except ValueError:
         print(data_times)
-        print("\n")
-        print(data_x)
-        print("\n")
-        print(data_y)
-        print("\n")
-        print(data_z)
-
 
 
 def calculate_welch_from_array(time: list[float], accelerometer_input: list[float]):
