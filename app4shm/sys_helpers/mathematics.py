@@ -30,6 +30,9 @@ def interpolate_data_stream(data_stream: list[Data]):
         data_x.append(i.x)
         data_y.append(i.y)
         data_z.append(i.z)
+    data_x.sort()
+    data_y.sort()
+    data_z.sort()
     t_start = data_times[0]
     t_end = data_times[len(data_times)-1]
     t_interval_array = []
