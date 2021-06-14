@@ -52,7 +52,7 @@ def clear_repeated(data_stream: list[Data]):
         try:
             if ds[i].timestamp == ds[i + 1].timestamp:
                 indexes_to_rm.append(i)
-        except ValueError:
+        except IndexError:
             pass
     for i in indexes_to_rm:
         del(ds[i])
