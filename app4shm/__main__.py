@@ -45,6 +45,20 @@ def print_stream():
         print(i.to_string())
 
 
+def clear_stream(data_stream: list[Data]):
+    ds = data_stream.copy()
+    indexes_to_rm = []
+    for i in range(len(ds)):
+        try:
+            if ds[i].timestamp == ds[i + 1].timestamp:
+                indexes_to_rm.append(i)
+        except ValueError:
+            pass
+    for i in indexes_to_rm:
+        del(ds[i])
+    return ds
+
+
 # Webservice itself
 @app.route('/diag')
 def legacy():
@@ -85,6 +99,7 @@ def receive():
         local_stream.append(data)
     sort_stream()
     local_stream.sort(key=operator.attrgetter("timestamp"))
+    local_stream = clear_stream(local_stream)
     interpolated = mt.interpolate_data_stream(local_stream)
     time_array = []
     x_array = []
