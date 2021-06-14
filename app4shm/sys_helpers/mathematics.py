@@ -34,10 +34,11 @@ def interpolate_data_stream(data_stream: list[Data]):
     for i in data_times:
         count = data_times.count(i)
         if count > 1:
-            data_times.remove(data_times.index(i))
-            data_x.remove(data_x.index(i))
-            data_y.remove(data_y.index(i))
-            data_z.remove(data_z.index(i))
+            indexval = data_times.index(i)
+            data_times.remove(i)
+            data_x.remove(data_x[indexval])
+            data_y.remove(data_y[indexval])
+            data_z.remove(data_z[indexval])
     t_start = data_times[0]
     t_end = data_times[len(data_times)-1]
     t_interval_array = []
