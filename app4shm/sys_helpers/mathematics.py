@@ -41,7 +41,7 @@ def interpolate_data_stream(data_stream: list[Data]):
                 data_y.remove(data_y[i])
                 data_z.remove(data_z[i])
         except:
-            pass
+            continue
     t_start = data_times[0]
     t_end = data_times[len(data_times)-1]
     t_interval_array = []
