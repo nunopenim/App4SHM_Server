@@ -45,7 +45,7 @@ def print_stream():
         print(i.to_string())
 
 
-def clear_stream(data_stream: list[Data]):
+def clear_repeated(data_stream: list[Data]):
     ds = data_stream.copy()
     indexes_to_rm = []
     for i in range(len(ds)):
@@ -99,7 +99,7 @@ def receive():
         local_stream.append(data)
     sort_stream()
     local_stream.sort(key=operator.attrgetter("timestamp"))
-    local_stream = clear_stream(local_stream)
+    local_stream = clear_repeated(local_stream)
     interpolated = mt.interpolate_data_stream(local_stream)
     time_array = []
     x_array = []
