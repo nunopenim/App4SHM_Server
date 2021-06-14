@@ -98,10 +98,8 @@ def receive():
     welch_x_f, welch_x_pxx = mt.calculate_welch_from_array(time_array, x_array)
     welch_y_f, welch_y_pxx = mt.calculate_welch_from_array(time_array, y_array)
     welch_z_f, welch_z_pxx = mt.calculate_welch_from_array(time_array, z_array)
-    print(welch_x_f)
-    print("\n")
-    print(welch_x_pxx)
-    return ""
+    json = flask.jsonify(welch_x_f.tolist(), welch_x_pxx.tolist(), welch_y_pxx.tolist(), welch_z_pxx.tolist())
+    return json
 
 
 @app.route('/generate')
