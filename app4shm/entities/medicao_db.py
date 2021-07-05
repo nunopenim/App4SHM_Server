@@ -5,5 +5,5 @@ class Medicao:
         self.x = float(x)
         self.y = float(y)
         self.z = float(z)
-        self.resultado_id = resultado_id
+        self.resultado_id = resultado_id  # Foreign key do resultado
         self.group = str(group)
