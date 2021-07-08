@@ -6,12 +6,18 @@
 </head>
 <body>
 <h1>App4SHM Diagnostic Page</h1>
-<br>
-<br>
-<br>
+
+<form action="/db" method="POST" enctype="multipart/form-data">
+    <input type="file" name="txt" id="txt">
+    <button type="submit">Submit</button>
+</form>
+
 
 <span style="white-space: pre-wrap">
         <p>{{ datalist }}</p>
     </span>
+
+
+
 </body>
 </html>

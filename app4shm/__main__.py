@@ -8,6 +8,7 @@
 # Use 4 spaces as indentation (I KNOW, BUT THAT'S HOW PYTHON ROLLS, I AM SORRY)
 
 import flask
+from flask import render_template, request, redirect
 import operator
 import app4shm.typewriter as tw
 from app4shm.entities.data import Data
@@ -15,6 +16,7 @@ import app4shm.sys_helpers.mathematics as mt
 import entities.grupo_db as gdb
 import entities.medicao_db as mdb
 from app4shm.entities.dataPoint import DataPoint
+import os
 
 ZIP_FILE = "deliverable.zip"
 
@@ -22,6 +24,7 @@ ZIP_FILE = "deliverable.zip"
 app = flask.Flask(__name__)
 app.config["DEBUG"] = False
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+app.config['TXT_UPLOADS'] = "/Users/Ricardo/PycharmProjects/App4SHM_Server/app4shm/txt"
 
 # data stream and operations on it
 data_stream = []
@@ -81,11 +84,18 @@ def diag():
     return flask.render_template("diag.html", datalist=datalist)
 
 
-@app.route('/db', methods=['GET'])
+@app.route('/db', methods=['GET', 'POST'])
 def db():
+    if request.method == "POST":
+        if request.files:
+            txt = request.files['txt']
+            txt.save(os.path.join(app.config['TXT_UPLOADS'], txt.filename))
+            return redirect(request.url)
     datalist = ""
     for user in mdb.showCol():
-        datalist += "id:"+str(user.id)+"   Frequency:" + str(user.frequency)+"   X:" + str(user.x)+"   Y:" + str(user.y)+"   Z:" + str(user.z)+"   username:" + user.username+"   usernameGroup:" + user.usernameGroup + '\n'
+        datalist += "id:" + str(user.id) + "   Frequency:" + str(user.frequency) + "   X:" + str(
+            user.x) + "   Y:" + str(user.y) + "   Z:" + str(
+            user.z) + "   username:" + user.username + "   usernameGroup:" + user.usernameGroup + '\n'
     return flask.render_template("db.html", datalist=datalist)
 
 
