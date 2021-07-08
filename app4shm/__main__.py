@@ -13,6 +13,7 @@ import app4shm.typewriter as tw
 from app4shm.entities.data import Data
 import app4shm.sys_helpers.mathematics as mt
 import entities.grupo_db as gdb
+import entities.medicao_db as mdb
 from app4shm.entities.dataPoint import DataPoint
 
 ZIP_FILE = "deliverable.zip"
@@ -134,8 +135,9 @@ def receivePoints():
                          y=float(i['y']),
                          z=float(i['z']),
                          group=i['group'])
+
         try:
-            gdb.add_group(gdb.get_id() + 1, data.group)
+            mdb.add_group(mdb.get_id() + 1, data.t, data.x, data.y, data.z, data.identifier, data.group)
         except:
             continue
     return ''
