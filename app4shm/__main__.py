@@ -152,21 +152,3 @@ def crude_interpolate():
 
 
 app.run(host="0.0.0.0", port="8080")  # change to port 80 on the server or use iptables, idk
-
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
-
-
-class Grupo(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True)
-
-    def __init__(self, ident, nome):
-        self.ident = ident
-        self.nome = nome
