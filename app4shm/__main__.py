@@ -128,7 +128,6 @@ def receive():
 def receivePoints():
     received = flask.request.get_json()
     for i in received:
-        print(i)
         data = DataPoint(identifier=i['id'],
                          t=float(i['t']),
                          x=float(i['x']),
