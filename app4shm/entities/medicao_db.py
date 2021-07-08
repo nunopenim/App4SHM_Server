@@ -66,3 +66,7 @@ def add_group(identification, t, x, y, z, username, usernameGroup):
             group = Medicao(identification, t, x, y, z, username, usernameGroup)
         SESSION.merge(group)
         SESSION.commit()
+
+def showCol():
+    with GROUPLOCK:
+        return SESSION.query(Medicao).all()

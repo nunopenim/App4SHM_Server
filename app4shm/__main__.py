@@ -81,6 +81,14 @@ def diag():
     return flask.render_template("diag.html", datalist=datalist)
 
 
+@app.route('/db', methods=['GET'])
+def db():
+    datalist = ""
+    for user in mdb.showCol():
+        datalist += "id:"+str(user.id)+"   Frequency:" + str(user.frequency)+"   X:" + str(user.x)+"   Y:" + str(user.y)+"   Z:" + str(user.z)+"   username:" + user.username+"   usernameGroup:" + user.usernameGroup + '\n'
+    return flask.render_template("db.html", datalist=datalist)
+
+
 @app.route('/cleanup')
 def cleanup():
     clear_stream()
