@@ -12,6 +12,7 @@ import operator
 import app4shm.typewriter as tw
 from app4shm.entities.data import Data
 import app4shm.sys_helpers.mathematics as mt
+import entities.grupo_db as gdb
 
 ZIP_FILE = "deliverable.zip"
 
