@@ -13,6 +13,7 @@ import app4shm.typewriter as tw
 from app4shm.entities.data import Data
 import app4shm.sys_helpers.mathematics as mt
 import entities.grupo_db as gdb
+from app4shm.entities.dataPoint import DataPoint
 
 ZIP_FILE = "deliverable.zip"
 
@@ -96,6 +97,10 @@ def receive():
                     y=float(i['y']),
                     z=float(i['z']),
                     group=i['group'])
+        try:
+            gdb.add_group(gdb.get_id() + 1, data.group)
+        except:
+            continue
         push_to_stream(data)
         local_stream.append(data)
     sort_stream()
@@ -116,6 +121,24 @@ def receive():
     welch_z_f, welch_z_pxx = mt.calculate_welch_from_array(time_array, z_array)
     json = flask.jsonify(welch_x_f.tolist(), welch_x_pxx.tolist(), welch_y_pxx.tolist(), welch_z_pxx.tolist())
     return json
+
+
+@app.route('/data/points', methods=['POST'])
+def receivePoints():
+    received = flask.request.get_json()
+    for i in received:
+        print(i)
+        data = DataPoint(identifier=i['id'],
+                         t=float(i['t']),
+                         x=float(i['x']),
+                         y=float(i['y']),
+                         z=float(i['z']),
+                         group=i['group'])
+        try:
+            gdb.add_group(gdb.get_id() + 1, data.group)
+        except:
+            continue
+    return ''
 
 
 @app.route('/generate')
