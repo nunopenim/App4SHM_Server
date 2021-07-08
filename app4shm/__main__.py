@@ -86,16 +86,22 @@ def diag():
 
 @app.route('/db', methods=['GET', 'POST'])
 def db():
+    datalist = ""
     if request.method == "POST":
         if request.files:
             txt = request.files['txt']
             txt.save(os.path.join(app.config['TXT_UPLOADS'], txt.filename))
-            return redirect(request.url)
-    datalist = ""
-    for user in mdb.showCol():
-        datalist += "id:" + str(user.id) + "   Frequency:" + str(user.frequency) + "   X:" + str(
-            user.x) + "   Y:" + str(user.y) + "   Z:" + str(
-            user.z) + "   username:" + user.username + "   usernameGroup:" + user.usernameGroup + '\n'
+
+            with open(os.path.join(app.config['TXT_UPLOADS']+"/"+txt.filename), 'r') as f:
+                for line in f:
+                    datalist += line
+            f.close()
+            return flask.render_template("db.html", datalist=datalist)
+    else:
+        for user in mdb.showCol():
+            datalist += "id:" + str(user.id) + "   Frequency:" + str(user.frequency) + "   X:" + str(
+                user.x) + "   Y:" + str(user.y) + "   Z:" + str(
+                user.z) + "   username:" + user.username + "   usernameGroup:" + user.usernameGroup + '\n'
     return flask.render_template("db.html", datalist=datalist)
 
 
