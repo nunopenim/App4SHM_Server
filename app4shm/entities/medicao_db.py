@@ -8,7 +8,7 @@ from sqlalchemy import create_engine
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://{user}:{password}@{server}/{database}'.format(
-    user='root', password='root', server='localhost', database='db')
+    user='app4shm', password='app4shm123', server='localhost', database='app4shm')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
