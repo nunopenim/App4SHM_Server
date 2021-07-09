@@ -13,21 +13,23 @@ import operator
 import app4shm.typewriter as tw
 from app4shm.entities.data import Data
 import app4shm.sys_helpers.mathematics as mt
-import entities.grupo_db as gdb
-import entities.medicao_db as mdb
+import app4shm.entities.grupo_db as gdb
+import app4shm.entities.medicao_db as mdb
 from app4shm.entities.dataPoint import DataPoint
 import os
 
 ZIP_FILE = "deliverable.zip"
+PREFIX = "/app4shm"
 
 # Web Service properties
 app = flask.Flask(__name__)
 app.config["DEBUG"] = False
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-app.config['TXT_UPLOADS'] = "/Users/Ricardo/PycharmProjects/App4SHM_Server/app4shm/txt"
+app.config['TXT_UPLOADS'] = "../txt"
 
 # data stream and operations on it
 data_stream = []
+
 
 
 def clear_stream():
@@ -66,7 +68,7 @@ def clear_repeated(data_stream: list[Data]):
 
 
 # Webservice itself
-@app.route('/diag')
+@app.route(f"{PREFIX}/diag")
 def legacy():
     """
     This is just a legacy method, just to redirect people to the new page, in the root, just in case
@@ -76,7 +78,7 @@ def legacy():
     return flask.redirect(flask.url_for('diag'))
 
 
-@app.route('/', methods=['GET'])
+@app.route(f"{PREFIX}/", methods=['GET'])
 def diag():
     datalist = ""
     for i in data_stream:
@@ -84,7 +86,7 @@ def diag():
     return flask.render_template("diag.html", datalist=datalist)
 
 
-@app.route('/db', methods=['GET', 'POST'])
+@app.route(f"{PREFIX}/db", methods=['GET', 'POST'])
 def db():
     datalist = ""
     if request.method == "POST":
@@ -105,13 +107,13 @@ def db():
     return flask.render_template("db.html", datalist=datalist)
 
 
-@app.route('/cleanup')
+@app.route(f"{PREFIX}/cleanup")
 def cleanup():
     clear_stream()
     return flask.redirect(flask.url_for('diag'))
 
 
-@app.route('/data/reading', methods=['POST'])
+@app.route(f"{PREFIX}/data/reading", methods=['POST'])
 def receive():
     local_stream = []
     received = flask.request.get_json()
@@ -148,7 +150,7 @@ def receive():
     return json
 
 
-@app.route('/data/points', methods=['POST'])
+@app.route(f"{PREFIX}/data/points", methods=['POST'])
 def receivePoints():
     received = flask.request.get_json()
     for i in received:
@@ -166,7 +168,7 @@ def receivePoints():
     return ''
 
 
-@app.route('/generate')
+@app.route(f"{PREFIX}/generate")
 def write_files():
     global data_stream
     dicte = {}
@@ -183,7 +185,7 @@ def write_files():
     return flask.send_from_directory("..", ZIP_FILE, as_attachment=True, cache_timeout=0)
 
 
-@app.route('/interpolate')
+@app.route(f"{PREFIX}/interpolate")
 def crude_interpolate():
     interpolated = mt.interpolate_data_stream(data_stream)
     dicte = {}
