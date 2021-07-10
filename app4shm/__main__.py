@@ -17,6 +17,7 @@ import app4shm.entities.grupo_db as gdb
 import app4shm.entities.medicao_db as mdb
 from app4shm.entities.dataPoint import DataPoint
 import os
+import pathlib
 
 ZIP_FILE = "deliverable.zip"
 PREFIX = "/app4shm"
@@ -25,11 +26,10 @@ PREFIX = "/app4shm"
 app = flask.Flask(__name__)
 app.config["DEBUG"] = False
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-app.config['TXT_UPLOADS'] = "../txt"
+app.config['TXT_UPLOADS'] = str(pathlib.Path(__file__).parent.resolve())+"\\txt"
 
 # data stream and operations on it
 data_stream = []
-
 
 
 def clear_stream():
@@ -94,11 +94,23 @@ def db():
             txt = request.files['txt']
             txt.save(os.path.join(app.config['TXT_UPLOADS'], txt.filename))
 
-            with open(os.path.join(app.config['TXT_UPLOADS']+"/"+txt.filename), 'r') as f:
+            count = -1
+            group = []
+            with open(os.path.join(app.config['TXT_UPLOADS'] + "/" + txt.filename), 'r') as f:
                 for line in f:
-                    datalist += line
+                    count = count + 1
+                    if count < 9:
+                        continue
+                    if count % 2 != 0:
+                        continue
+                    words = line.split()
+                    group.append(float(words[3]))
+                    datalist += words[3] +"\n"
+
             f.close()
-            return flask.render_template("db.html", datalist=datalist)
+            group = mt.mahalanobis(group)
+            os.remove(os.path.join(app.config['TXT_UPLOADS'] + "/" + txt.filename))
+            return flask.render_template("db.html", datalist=group)
     else:
         for user in mdb.showCol():
             datalist += "id:" + str(user.id) + "   Frequency:" + str(user.frequency) + "   X:" + str(
@@ -148,6 +160,19 @@ def receive():
     welch_z_f, welch_z_pxx = mt.calculate_welch_from_array(time_array, z_array)
     json = flask.jsonify(welch_x_f.tolist(), welch_x_pxx.tolist(), welch_y_pxx.tolist(), welch_z_pxx.tolist())
     return json
+
+#TODO enviar verde vermelho para o telemovel
+@app.route(f"{PREFIX}/data/results", methods=['POST'])
+def results():
+    received = flask.request.get_json()
+    for i in received:
+        data = DataPoint(identifier=i['id'],
+                         t=float(i['t']),
+                         x=float(i['x']),
+                         y=float(i['y']),
+                         z=float(i['z']),
+                         group=i['group'])
+    group = mdb.showColx("testgroup")
 
 
 @app.route(f"{PREFIX}/data/points", methods=['POST'])
@@ -200,6 +225,5 @@ def crude_interpolate():
         tw.buffer_to_file(i + "_int", "inter_temp/")
     tw.zip_file("interpolated", "inter_temp/")
     return flask.send_from_directory("..", "interpolated.zip", as_attachment=True, cache_timeout=0)
-
 
 app.run(host="0.0.0.0", port="8080")  # change to port 80 on the server or use iptables, idk

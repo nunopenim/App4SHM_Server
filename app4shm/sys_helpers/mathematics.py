@@ -10,6 +10,7 @@
 
 from scipy.interpolate import interpn as interpn
 from app4shm.entities.data import Data
+from scipy.stats import norm
 import numpy as np
 from scipy import signal
 
@@ -40,7 +41,7 @@ def interpolate_data_stream(data_stream: list[Data]):
             data_y.remove(data_y[indexval])
             data_z.remove(data_z[indexval])
     t_start = data_times[0]
-    t_end = data_times[len(data_times)-1]
+    t_end = data_times[len(data_times) - 1]
     t_interval_array = []
     start_me = t_start
     while start_me < t_end:
@@ -70,14 +71,15 @@ def interpolate_data_stream(data_stream: list[Data]):
 
 def calculate_welch_from_array(time: list[float], accelerometer_input: list[float]):
     delta_times = 0.01  # 10ms
-    measuring_frequency = delta_times**(-1)
+    measuring_frequency = delta_times ** (-1)
     total_sample_number = len(time)  # measuring_frequency*len(time)
     n_segments = 3
-    ls = int(np.round(total_sample_number/n_segments))
+    ls = int(np.round(total_sample_number / n_segments))
     overlap_perc = 50
-    overlaped_samples = int(np.round(ls*overlap_perc/100))
+    overlaped_samples = int(np.round(ls * overlap_perc / 100))
     discrete_fourier_transform_points = ls
-    f, pxx = signal.welch(accelerometer_input, fs=measuring_frequency, nperseg=ls, noverlap=overlaped_samples, nfft=discrete_fourier_transform_points)
+    f, pxx = signal.welch(accelerometer_input, fs=measuring_frequency, nperseg=ls, noverlap=overlaped_samples,
+                          nfft=discrete_fourier_transform_points)
     return f, pxx
     # f1 = np.reshape(f, (1, len(f)))
     # fs = 10e3
@@ -89,3 +91,42 @@ def calculate_welch_from_array(time: list[float], accelerometer_input: list[floa
     # x = amp*np.sin(2*np.pi*freq*time)
     # x += np.random.normal(scale=np.sqrt(noise_power), size=time.shape)
     # f, Pxx_den = signal.welch(x, fs, nperseg=1024)
+
+
+def scoreMahalanobis_shm(values, mean, cov):
+    mahalanobis = []
+    for x in values:
+        mahalanobis.append(((x - mean) / cov * (x - mean)))
+    return mahalanobis
+
+
+def mahalanobis(group):
+    zValues = group
+    # for values in group:
+    # zValues.append(values.y)
+    m = 1
+    n = len(group)
+
+    PFA = 0.05
+    degFreedom = m
+    UCL = 3.8415
+    #2 UCL = 5.9915
+    #3 UCL = 7.8147
+    #print(UCL)
+
+    covMatrix = np.cov(zValues, bias=True)
+    #print(covMatrix)
+    mean = np.mean(zValues)
+    #print(mean)
+
+    DI = scoreMahalanobis_shm(zValues, mean, covMatrix)
+    #print(DI)
+    mask = []
+    T = 0
+    F = 0
+    for i in DI:
+        if i < UCL:
+            F += 1
+        else:
+            T += 1
+    return "good "+str(F)+"\nBAD "+str(T)

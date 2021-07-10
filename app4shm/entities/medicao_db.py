@@ -9,6 +9,7 @@ from sqlalchemy import create_engine
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://{user}:{password}@{server}/{database}'.format(
     user='app4shm', password='app4shm123', server='localhost', database='app4shm')
+    #user='root', password='root', server='localhost', database='db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -67,6 +68,12 @@ def add_group(identification, t, x, y, z, username, usernameGroup):
         SESSION.merge(group)
         SESSION.commit()
 
+
 def showCol():
     with GROUPLOCK:
         return SESSION.query(Medicao).all()
+
+
+def showColx(s):
+    with GROUPLOCK:
+        return SESSION.query(Medicao).filter(Medicao.usernameGroup == s).all()
