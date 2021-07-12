@@ -164,19 +164,6 @@ def receive():
     json = flask.jsonify(welch_x_f.tolist(), welch_x_pxx.tolist(), welch_y_pxx.tolist(), welch_z_pxx.tolist())
     return json
 
-#TODO enviar verde vermelho para o telemovel
-@app.route(f"{PREFIX}/data/results", methods=['POST'])
-def results():
-    received = flask.request.get_json()
-    for i in received:
-        data = DataPoint(identifier=i['id'],
-                         t=float(i['t']),
-                         x=float(i['x']),
-                         y=float(i['y']),
-                         z=float(i['z']),
-                         group=i['group'])
-    group = mdb.showColx("testgroup")
-
 
 @app.route(f"{PREFIX}/data/points", methods=['POST'])
 def receivePoints():
