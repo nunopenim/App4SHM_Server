@@ -63,7 +63,10 @@ def clear_repeated(data_stream: list[Data]):
         except IndexError:
             pass
     for i in indexes_to_rm:
-        del (ds[i])
+        try:
+            del (ds[i])
+        except IndexError:
+            pass
     return ds
 
 
