@@ -129,4 +129,4 @@ def mahalanobis(group):
             F += 1
         else:
             T += 1
-    return "good "+str(F)+"\nBAD "+str(T)
+    return "Under UCL "+str(F)+"\nAbove UCL "+str(T)

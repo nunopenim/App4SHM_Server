@@ -26,7 +26,7 @@ PREFIX = "/app4shm"
 app = flask.Flask(__name__)
 app.config["DEBUG"] = False
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-app.config['TXT_UPLOADS'] = str(pathlib.Path(__file__).parent.resolve())+"\\txt"
+app.config['TXT_UPLOADS'] = str(pathlib.Path(__file__).parent.resolve()) + "\\txt"
 
 # data stream and operations on it
 data_stream = []
@@ -108,7 +108,7 @@ def db():
                         continue
                     words = line.split()
                     group.append(float(words[3]))
-                    datalist += words[3] +"\n"
+                    datalist += words[3] + "\n"
 
             f.close()
             group = mt.mahalanobis(group)
@@ -183,6 +183,16 @@ def receivePoints():
     return ''
 
 
+@app.route(f"{PREFIX}/structure")
+def structure():
+    local_stream = []
+    groups = gdb.showCol()
+    for group in groups:
+        local_stream.append(group.username + ":" + str(len(mdb.showColx(group.username))))
+    json = flask.jsonify(local_stream)
+    return json
+
+
 @app.route(f"{PREFIX}/generate")
 def write_files():
     global data_stream
@@ -215,5 +225,6 @@ def crude_interpolate():
         tw.buffer_to_file(i + "_int", "inter_temp/")
     tw.zip_file("interpolated", "inter_temp/")
     return flask.send_from_directory("..", "interpolated.zip", as_attachment=True, cache_timeout=0)
+
 
 app.run(host="0.0.0.0", port="8080")  # change to port 80 on the server or use iptables, idk

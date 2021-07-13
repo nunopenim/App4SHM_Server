@@ -50,6 +50,7 @@ Grupo.__table__.create(checkfirst=True)
 
 GROUPLOCK = threading.RLock()
 
+
 def get_id():
     length = 0
     try:
@@ -57,6 +58,7 @@ def get_id():
     finally:
         SESSION.close()
         return length
+
 
 def add_group(identification, groupname):
     with GROUPLOCK:
@@ -66,3 +68,7 @@ def add_group(identification, groupname):
         SESSION.merge(group)
         SESSION.commit()
 
+
+def showCol():
+    with GROUPLOCK:
+        return SESSION.query(Grupo).all()
