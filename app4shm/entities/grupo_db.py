@@ -28,7 +28,7 @@ BASE = declarative_base()
 
 
 def start() -> scoped_session:
-    engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+    engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], max_overflow=-1)
     BASE.metadata.bind = engine
     BASE.metadata.create_all(engine)
     return scoped_session(sessionmaker(bind=engine, autoflush=False))
