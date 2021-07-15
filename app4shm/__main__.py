@@ -188,7 +188,7 @@ def structure():
     local_stream = []
     groups = gdb.showCol()
     for group in groups:
-        local_stream.append(group.username + ":" + str(len(mdb.showColx(group.username))))
+        local_stream.append({ 'name' : group.username, 'count' : len(mdb.showColx(group.username)) })
     json = flask.jsonify(local_stream)
     return json
 
