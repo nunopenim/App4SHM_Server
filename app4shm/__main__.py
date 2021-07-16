@@ -18,6 +18,7 @@ import app4shm.entities.medicao_db as mdb
 from app4shm.entities.dataPoint import DataPoint
 import os
 import pathlib
+import random
 
 ZIP_FILE = "deliverable.zip"
 PREFIX = "/app4shm"
@@ -174,14 +175,17 @@ def receivePoints():
                          x=float(i['x']),
                          y=float(i['y']),
                          z=float(i['z']),
-                         group=i['group'])
+                         group=i['group'],
+                         testing=bool(i['testing']))
+        if data.testing:
+            try:
+                mdb.add_group(mdb.get_id() + 1, data.t, data.x, data.y, data.z, data.identifier, data.group)
+            except:
+                continue
+            return ''
+        semaphore = random.choice([True, False])
 
-        try:
-            mdb.add_group(mdb.get_id() + 1, data.t, data.x, data.y, data.z, data.identifier, data.group)
-        except:
-            continue
-    return ''
-
+        return flask.jsonify(semaphore)
 
 @app.route(f"{PREFIX}/structure")
 def structure():
