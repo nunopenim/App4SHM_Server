@@ -27,19 +27,17 @@ def start() -> scoped_session:
 class Medicao(BASE):
     __tablename__ = 'Medicao'
     id = db.Column(db.Integer, primary_key=True)
-    frequency = db.Column(db.Float)
-    x = db.Column(db.Float)
-    y = db.Column(db.Float)
-    z = db.Column(db.Float)
+    z_freq1 = db.Column(db.Float)
+    z_freq2 = db.Column(db.Float)
+    z_freq3 = db.Column(db.Float)
     username = db.Column(db.String(80))
     usernameGroup = db.Column(db.String(80))
 
-    def __init__(self, identifier, t, x, y, z, username, usernameGroup):
+    def __init__(self, identifier, z_freq1, z_freq2, z_freq3, username, usernameGroup):
         self.id = str(identifier)
-        self.frequency = float(t)
-        self.x = float(x)
-        self.y = float(y)
-        self.z = float(z)
+        self.z_freq1 = float(z_freq1)
+        self.z_freq2 = float(z_freq2)
+        self.z_freq3 = float(z_freq3)
         self.username = username
         self.usernameGroup = usernameGroup  # Foreign key do resultado
 
@@ -60,11 +58,11 @@ def get_id():
         return length
 
 
-def add_group(identification, t, x, y, z, username, usernameGroup):
+def add_group(identification, z_freq1, z_freq2, z_freq3, username, usernameGroup):
     with GROUPLOCK:
         group = SESSION.query(Medicao).get(identification)
         if not group:
-            group = Medicao(identification, t, x, y, z, username, usernameGroup)
+            group = Medicao(identification, z_freq1, z_freq2, z_freq3, username, usernameGroup)
         SESSION.merge(group)
         SESSION.commit()
 

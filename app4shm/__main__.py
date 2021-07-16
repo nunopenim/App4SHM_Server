@@ -117,9 +117,8 @@ def db():
             return flask.render_template("db.html", datalist=group)
     else:
         for user in mdb.showCol():
-            datalist += "id:" + str(user.id) + "   Frequency:" + str(user.frequency) + "   X:" + str(
-                user.x) + "   Y:" + str(user.y) + "   Z:" + str(
-                user.z) + "   username:" + user.username + "   usernameGroup:" + user.usernameGroup + '\n'
+            datalist += "id:" + str(user.id) + "   z_freq1:" + str(user.z_freq1) + "   z_freq2:" + str(
+                user.z_freq2) + "   z_freq3:" + str(user.z_freq3) + "   username:" + user.username + "   usernameGroup:" + user.usernameGroup + '\n'
     return flask.render_template("db.html", datalist=datalist)
 
 
@@ -169,30 +168,34 @@ def receive():
 @app.route(f"{PREFIX}/data/points", methods=['POST'])
 def receivePoints():
     received = flask.request.get_json()
-    for i in received:
-        data = DataPoint(identifier=i['id'],
-                         t=float(i['t']),
-                         x=float(i['x']),
-                         y=float(i['y']),
-                         z=float(i['z']),
-                         group=i['group'],
-                         testing=bool(i['testing']))
-        if data.testing:
-            try:
-                mdb.add_group(mdb.get_id() + 1, data.t, data.x, data.y, data.z, data.identifier, data.group)
-            except:
-                continue
-            return ''
-        semaphore = random.choice([True, False])
+    testing = False
+    frequencies = [received[0]['t'], received[1]['t'], received[2]['t']]
 
-        return flask.jsonify(semaphore)
+    data = DataPoint(identifier=received[0]['id'],
+                     z_freq1=float(frequencies[0]),
+                     z_freq2=float(frequencies[1]),
+                     z_freq3=float(frequencies[2]),
+                     group=received[0]['group'],
+                     testing=bool(received[0]['testing']))
+
+    if data.testing:
+        testing = True
+        mdb.add_group(mdb.get_id() + 1, data.z_freq1, data.z_freq2, data.z_freq3, data.identifier, data.group)
+
+
+    if testing:
+        return ''
+
+    semaphore = random.choice([True, False])
+    return flask.jsonify(semaphore)
+
 
 @app.route(f"{PREFIX}/structure")
 def structure():
     local_stream = []
     groups = gdb.showCol()
     for group in groups:
-        local_stream.append({ 'name' : group.username, 'count' : len(mdb.showColx(group.username)) })
+        local_stream.append({'name': group.username, 'count': len(mdb.showColx(group.username))})
     json = flask.jsonify(local_stream)
     return json
 
