@@ -8,6 +8,7 @@
 # Use 4 spaces as indentation (I KNOW, BUT THAT'S HOW PYTHON ROLLS, I AM SORRY)
 
 import flask
+import numpy as np
 from flask import render_template, request, redirect
 import operator
 import app4shm.typewriter as tw
@@ -94,31 +95,58 @@ def diag():
 def db():
     datalist = ""
     if request.method == "POST":
+        infrastructure = request.form['infrastructure']
+
+        # infrastructure name error checks
+        groups = gdb.showCol()
+        if infrastructure == "":
+            return flask.render_template("db.html", datalist="please enter an infrastructure name")
+        for group in groups:
+            if group.username != infrastructure and group.username.upper() == infrastructure.upper():
+                return flask.render_template("db.html",
+                                             datalist="infrastructure already exists with different capitalization")
+
         if request.files:
             txt = request.files['txt']
             txt.save(os.path.join(app.config['TXT_UPLOADS'], txt.filename))
 
             count = -1
-            group = []
+            data = []
             with open(os.path.join(app.config['TXT_UPLOADS'] + "/" + txt.filename), 'r') as f:
                 for line in f:
                     count = count + 1
-                    if count < 9:
-                        continue
-                    if count % 2 != 0:
-                        continue
                     words = line.split()
-                    group.append(float(words[3]))
-                    datalist += words[3] + "\n"
+
+                    d = DataPoint(
+                        identifier='Server',
+                        z_freq1=float(words[0]),
+                        z_freq2=float(words[1]),
+                        z_freq3=float(words[2]),
+                        group=infrastructure,
+                        testing=True
+                    )
+                    data.append(d)
+                    mdb.add_group(mdb.get_id() + 1, d.z_freq1, d.z_freq2, d.z_freq3, d.identifier, d.group)
+                    datalist += words[0]
+                    datalist += words[1]
+                    datalist += words[2] + "\n"
 
             f.close()
-            group = mt.mahalanobis(group)
+
+            try:
+                gdb.add_group(gdb.get_id() + 1, data[0].group)
+            except:
+                # python has forced my hand, except should be empty
+                data
+
+            # group = mt.mahalanobis(data)
             os.remove(os.path.join(app.config['TXT_UPLOADS'] + "/" + txt.filename))
-            return flask.render_template("db.html", datalist=group)
-    else:
-        for user in mdb.showCol():
-            datalist += "id:" + str(user.id) + "   z_freq1:" + str(user.z_freq1) + "   z_freq2:" + str(
-                user.z_freq2) + "   z_freq3:" + str(user.z_freq3) + "   username:" + user.username + "   usernameGroup:" + user.usernameGroup + '\n'
+            # return flask.render_template("db.html", datalist=group)
+            datalist = ""
+    for user in mdb.showCol():
+        datalist += "id:" + str(user.id) + "   z_freq1:" + str(user.z_freq1) + "   z_freq2:" + str(
+            user.z_freq2) + "   z_freq3:" + str(
+            user.z_freq3) + "   username:" + user.username + "   infrastructure:" + user.usernameGroup + '\n'
     return flask.render_template("db.html", datalist=datalist)
 
 
@@ -182,12 +210,10 @@ def receivePoints():
         testing = True
         mdb.add_group(mdb.get_id() + 1, data.z_freq1, data.z_freq2, data.z_freq3, data.identifier, data.group)
 
-
     if testing:
         return ''
 
-    semaphore = random.choice([True, False])
-    return flask.jsonify(semaphore)
+    return flask.jsonify(mt.mahalanobis(mdb.showColx(data.group),data))
 
 
 @app.route(f"{PREFIX}/structure")
@@ -233,5 +259,37 @@ def crude_interpolate():
     tw.zip_file("interpolated", "inter_temp/")
     return flask.send_from_directory("..", "interpolated.zip", as_attachment=True, cache_timeout=0)
 
+
+# x = np.array([[3.1, 7.5, 14.6]])
+# mean = np.array([[3.1, 7.5, 14.6]])
+# freq1 = []
+# freq2 = []
+# freq3 = []
+#
+# freq1.append(0.990099)
+# freq1.append(6.93069)
+# freq1.append(9.90099)
+#
+# freq2.append(19.0909)
+# freq2.append(20.0)
+# freq2.append(20.9091)
+#
+# freq3.append(8.64198)
+# freq3.append(9.87654)
+# freq3.append(11.1111)
+#
+# # treino = np.transpose(np.array([[2, 2, 3], [1, 3, 3], [1, 2, 4], [1, 3, 5]]))
+# treino = [[3.1, 7.1, 14.2], [3.0, 7.3, 14.1], [3.2, 7.4, 14.5], [3.5, 7.9, 14.8]]
+# print(treino)
+# print(mean)
+# print("Matrix de covariancia")
+# print(np.cov(np.transpose(treino), bias=True))
+# covariancia = np.cov(np.transpose(treino), bias=True)
+# print("\n")
+# print((x - mean))
+# print(np.transpose((x - mean)))
+# print(np.dot(x - mean, np.linalg.inv(covariancia)))
+#
+# print(np.dot(np.dot((x - mean), np.linalg.inv(covariancia)), np.transpose((x - mean))))
 
 app.run(host="0.0.0.0", port="8080")  # change to port 80 on the server or use iptables, idk

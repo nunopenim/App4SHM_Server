@@ -93,40 +93,42 @@ def calculate_welch_from_array(time: list[float], accelerometer_input: list[floa
     # f, Pxx_den = signal.welch(x, fs, nperseg=1024)
 
 
-def scoreMahalanobis_shm(values, mean, cov):
+def scoreMahalanobis_shm(x, mean, cov):
     mahalanobis = []
-    for x in values:
-        mahalanobis.append(((x - mean) / cov * (x - mean)))
+    mahalanobis.append(np.dot(np.dot((x - mean), np.linalg.inv(cov)), np.transpose((x - mean))))
     return mahalanobis
 
 
-def mahalanobis(group):
-    zValues = group
-    # for values in group:
-    # zValues.append(values.y)
-    m = 1
-    n = len(group)
+def mahalanobis(group, x):
+    m = 3
+    # n = len(group)
+
+    testPoint = np.array([x.z_freq1, x.z_freq2, x.z_freq3])
 
     PFA = 0.05
     degFreedom = m
-    UCL = 3.8415
-    #2 UCL = 5.9915
-    #3 UCL = 7.8147
-    #print(UCL)
+    # UCL = 3.8415 # m = 1
+    # UCL = 5.9915 # m = 2
+    UCL = 7.8147  # m = 3
+    # print(UCL)
+    values = np.array([])
 
-    covMatrix = np.cov(zValues, bias=True)
-    #print(covMatrix)
-    mean = np.mean(zValues)
-    #print(mean)
+    for freq in group:
+        values = np.append(values, freq.z_freq1)
+        values = np.append(values, freq.z_freq2)
+        values = np.append(values, freq.z_freq3)
 
-    DI = scoreMahalanobis_shm(zValues, mean, covMatrix)
-    #print(DI)
-    mask = []
-    T = 0
-    F = 0
+    values = np.reshape(values, (-1, 3))
+    print(values)
+    covMatrix = np.cov(np.transpose(values), bias=True)
+    print(covMatrix)
+    mean = np.mean(values, axis=0)
+    print(mean)
+
+    DI = scoreMahalanobis_shm(testPoint, mean, covMatrix)
+    print(DI)
     for i in DI:
-        if i < UCL:
-            F += 1
+        if i <= UCL:
+            return True
         else:
-            T += 1
-    return "Under UCL "+str(F)+"\nAbove UCL "+str(T)
+            return False
