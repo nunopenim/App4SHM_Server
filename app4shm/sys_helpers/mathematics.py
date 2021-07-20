@@ -119,14 +119,14 @@ def mahalanobis(group, x):
         values = np.append(values, freq.z_freq3)
 
     values = np.reshape(values, (-1, 3))
-    print(values)
+    #print(values)
     covMatrix = np.cov(np.transpose(values), bias=True)
-    print(covMatrix)
+    #print(covMatrix)
     mean = np.mean(values, axis=0)
-    print(mean)
+    #print(mean)
 
     DI = scoreMahalanobis_shm(testPoint, mean, covMatrix)
-    print(DI)
+    #print(DI)
     for i in DI:
         if i <= UCL:
             return True
