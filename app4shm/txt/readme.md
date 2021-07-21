@@ -1,0 +1,1 @@
+this folder is for files uploaded to the server, they will be deleted after read
