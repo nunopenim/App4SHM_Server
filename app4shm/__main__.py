@@ -28,7 +28,7 @@ PREFIX = "/app4shm"
 app = flask.Flask(__name__)
 app.config["DEBUG"] = False
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-app.config['TXT_UPLOADS'] = str(pathlib.Path(__file__).parent.resolve()) + "\\txt"
+app.config['TXT_UPLOADS'] = str(pathlib.Path(__file__).parent.resolve()) + "/txt"
 
 # data stream and operations on it
 data_stream = []
@@ -193,6 +193,22 @@ def receive():
     return json
 
 
+@app.route(f"{PREFIX}/db/delete", methods=['GET', 'POST'])
+def dbDelete():
+    names = []
+    infrastructures = gdb.showCol()
+    for i in infrastructures:
+        names.append(i)
+    return flask.render_template("delete_db.html", datalist=names)
+
+
+@app.route(f"{PREFIX}/db/<int:id>/<string:username>", methods=['GET', 'POST'])
+def dbDeleteX(id: int, username: str):
+    gdb.delCol(id)
+    mdb.delCol(username)
+    return flask.redirect(f"{PREFIX}/db")
+
+
 @app.route(f"{PREFIX}/data/points", methods=['POST'])
 def receivePoints():
     received = flask.request.get_json()
@@ -213,7 +229,7 @@ def receivePoints():
     if testing:
         return ''
 
-    return flask.jsonify(mt.mahalanobis(mdb.showColx(data.group),data))
+    return flask.jsonify(mt.mahalanobis(mdb.showColx(data.group), data))
 
 
 @app.route(f"{PREFIX}/structure")

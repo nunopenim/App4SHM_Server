@@ -5,14 +5,26 @@
     <title>App4SHM Diagnostics</title>
 </head>
 <body>
+
 <h1>App4SHM Diagnostic Page</h1>
+
+<div style="float: left; display: inline-flex">
+        <a href=db/delete style="padding-left: 25px">
+            <button class=grey style="height: 75px; width: 150px; font-size: 20px">Delete Infrastructures</button>
+        </a>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 <form action="db" method="POST" enctype="multipart/form-data">
     <input type="file" name="txt" id="txt">
     <input name="infrastructure">
     <button type="submit">Submit</button>
 </form>
-
 
 <span style="white-space: pre-wrap">
         <p>{{ datalist }}</p>
