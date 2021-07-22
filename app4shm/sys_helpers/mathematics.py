@@ -7,6 +7,7 @@
 #
 # No tabs allowed for the safety of the entire project
 # Use 4 spaces as indentation (I KNOW, BUT THAT'S HOW PYTHON ROLLS, I AM SORRY)
+import traceback
 
 from scipy.interpolate import interpn as interpn
 from app4shm.entities.data import Data
@@ -23,6 +24,7 @@ def interpolate_data_stream(data_stream: list[Data]):
     data_device = data_stream[0].identifier
     data_group = data_stream[0].group
     data_times = []
+    counter = 0
     data_x = []
     data_y = []
     data_z = []
@@ -32,14 +34,15 @@ def interpolate_data_stream(data_stream: list[Data]):
         data_x.append(i.x)
         data_y.append(i.y)
         data_z.append(i.z)
-    for i in data_times:
-        count = data_times.count(i)
+    while counter < len(data_times) - 1:
+        count = data_times.count(data_times[counter])
         if count > 1:
-            indexval = data_times.index(i)
-            data_times.remove(i)
-            data_x.remove(data_x[indexval])
-            data_y.remove(data_y[indexval])
-            data_z.remove(data_z[indexval])
+            data_times.remove(data_times[counter])
+            data_x.remove(data_x[counter])
+            data_y.remove(data_y[counter])
+            data_z.remove(data_z[counter])
+            counter -= 1
+        counter += 1
     t_start = data_times[0]
     t_end = data_times[len(data_times) - 1]
     t_interval_array = []
@@ -65,6 +68,9 @@ def interpolate_data_stream(data_stream: list[Data]):
                                    group=data_group))
         return ret_stream
     except ValueError:
+        track = traceback.format_exc()
+        print(track)
+        print("---------------------")
         print(data_times)
         return []
 
