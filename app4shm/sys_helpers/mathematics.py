@@ -100,9 +100,7 @@ def calculate_welch_from_array(time: list[float], accelerometer_input: list[floa
 
 
 def scoreMahalanobis_shm(x, mean, cov):
-    mahalanobis = []
-    mahalanobis.append(np.dot(np.dot((x - mean), np.linalg.inv(cov)), np.transpose((x - mean))))
-    return mahalanobis
+    return np.dot(np.dot((x - mean), np.linalg.inv(cov)), np.transpose((x - mean)))
 
 
 def mahalanobis(group, x):
@@ -125,16 +123,18 @@ def mahalanobis(group, x):
         values = np.append(values, freq.z_freq3)
 
     values = np.reshape(values, (-1, 3))
-    #print(values)
+    # print(values)
     covMatrix = np.cov(np.transpose(values), bias=True)
-    #print(covMatrix)
+    # print(covMatrix)
     mean = np.mean(values, axis=0)
-    #print(mean)
+    # print(mean)
+    DI = []
 
-    DI = scoreMahalanobis_shm(testPoint, mean, covMatrix)
-    #print(DI)
-    for i in DI:
-        if i <= UCL:
-            return True
-        else:
-            return False
+    for value in values:
+        DI.append(scoreMahalanobis_shm(value, mean, covMatrix))
+    DI.append(scoreMahalanobis_shm(testPoint, mean, covMatrix))
+    # print(DI)
+    if DI[-1] <= UCL:
+        return True, UCL, DI
+    else:
+        return False, UCL, DI
