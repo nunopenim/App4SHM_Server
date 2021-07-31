@@ -6,6 +6,7 @@
 #
 # No tabs allowed for the safety of the entire project
 # Use 4 spaces as indentation (I KNOW, BUT THAT'S HOW PYTHON ROLLS, I AM SORRY)
+import traceback
 
 import flask
 import numpy as np
@@ -181,6 +182,30 @@ def receive():
     x_array = []
     y_array = []
     z_array = []
+    mean = []
+    try:
+        print(received[0]['group'])
+        values = mdb.showColx(received[0]['group'])
+        count = 0.0
+        meanValue1 = 0.0
+        meanValue2 = 0.0
+        meanValue3 = 0.0
+        for i in values:
+            meanValue1 += i.z_freq1
+            meanValue2 += i.z_freq2
+            meanValue3 += i.z_freq3
+            count += 1
+        meanValue1 = meanValue1 / count
+        meanValue2 = meanValue2 / count
+        meanValue3 = meanValue3 / count
+        mean.append(meanValue1)
+        mean.append(meanValue2)
+        mean.append(meanValue3)
+    except:
+        print(traceback.format_exc())
+        mean = [0, 0, 0]
+    print(mean)
+
     for i in interpolated:
         time_array.append(i.timestamp)
         x_array.append(i.x)
@@ -189,7 +214,7 @@ def receive():
     welch_x_f, welch_x_pxx = mt.calculate_welch_from_array(time_array, x_array)
     welch_y_f, welch_y_pxx = mt.calculate_welch_from_array(time_array, y_array)
     welch_z_f, welch_z_pxx = mt.calculate_welch_from_array(time_array, z_array)
-    json = flask.jsonify(welch_x_f.tolist(), welch_x_pxx.tolist(), welch_y_pxx.tolist(), welch_z_pxx.tolist())
+    json = flask.jsonify(mean, welch_x_f.tolist(), welch_x_pxx.tolist(), welch_y_pxx.tolist(), welch_z_pxx.tolist())
     return json
 
 
@@ -276,6 +301,7 @@ def crude_interpolate():
     return flask.send_from_directory("..", "interpolated.zip", as_attachment=True, cache_timeout=0)
 
 
+# example of malahanobis
 # x = np.array([[3.1, 7.5, 14.6]])
 # mean = np.array([[3.1, 7.5, 14.6]])
 # freq1 = []
