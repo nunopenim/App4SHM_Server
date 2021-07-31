@@ -184,7 +184,6 @@ def receive():
     z_array = []
     mean = []
     try:
-        print(received[0]['group'])
         values = mdb.showColx(received[0]['group'])
         count = 0.0
         meanValue1 = 0.0
@@ -204,7 +203,6 @@ def receive():
     except:
         print(traceback.format_exc())
         mean = [0, 0, 0]
-    print(mean)
 
     for i in interpolated:
         time_array.append(i.timestamp)
