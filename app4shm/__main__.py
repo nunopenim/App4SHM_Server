@@ -201,7 +201,6 @@ def receive():
         mean.append(meanValue2)
         mean.append(meanValue3)
     except:
-        print(traceback.format_exc())
         mean = [0, 0, 0]
 
     for i in interpolated:
